@@ -237,7 +237,7 @@ def train(model, epoch):
         optimizer.zero_grad()
         data = data.to(device)
         target = target.to(device)
-        data = data.requires_grad_()
+        data = data.requires_grad_() #set requires_grad to True for training
         output = model(data)
         output = output.permute(1, 0, 2) #original output dimensions are batchSizex1x10 
         loss = F.nll_loss(output[0], target) #the loss functions expects a batchSizex10 input
@@ -264,8 +264,6 @@ def test(model, epoch):
     for data, target in test_loader:
         data = data.to(device)
         target = target.to(device)
-        with torch.no_grad():
-            data, target = Variable(data), Variable(target)
         output = model(data)
         output = output.permute(1, 0, 2)
         pred = output.max(2)[1] # get the index of the max log-probability
